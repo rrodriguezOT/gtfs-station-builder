@@ -20,7 +20,7 @@ import VehicleCoupling from "./interfaces/VehicleCoupling";
 import VehicleDoor from "./interfaces/VehicleDoor";
 import MeasureTool from 'measuretool-googlemaps-v3';
 
-export interface AppProps {}
+export interface AppProps { }
 
 type AppMode = "FILE_UPLADING" | "STATION_SELECTION" | "STATION_BUILDER";
 
@@ -31,7 +31,7 @@ export interface AppState {
 	mode: AppMode;
 	stations: Communication | null;
 	selectedStation: Communication | null;
-	untouchedFiles: {[key: string]: string};
+	untouchedFiles: { [key: string]: string };
 	map?: google.maps.Map;
 	mapObjects: (google.maps.Marker | TxtOverlay)[];
 }
@@ -80,7 +80,7 @@ export default class App extends Component<AppProps, AppState> {
 				fileNames.push(file.name);
 				return FileService.readUploadedFileAsText(file);
 			}));
-		
+
 		if (!this.checkRequiredFiles(fileNames)) {
 			this.setState({
 				isLoading: false
@@ -97,7 +97,7 @@ export default class App extends Component<AppProps, AppState> {
 			zip.forEach((relativePath, file) => {
 				files.push(file);
 			});
-			
+
 			const fileNames: string[] = [];
 			const filePromises = Promise.all(files
 				.filter((file: JSZipObject) => file.name.indexOf(".txt") !== -1)
@@ -105,7 +105,7 @@ export default class App extends Component<AppProps, AppState> {
 					fileNames.push(file.name);
 					return file.async("text");
 				}));
-			
+
 			if (!this.checkRequiredFiles(fileNames)) {
 				this.setState({
 					isLoading: false
@@ -132,7 +132,7 @@ export default class App extends Component<AppProps, AppState> {
 		};
 
 		filePromises.then((fileContents: string[]) => {
-			const untouchedFiles: {[key: string]: string} = {};
+			const untouchedFiles: { [key: string]: string } = {};
 			fileContents.forEach((fileContent: string, fileIndex: number) => {
 				const fileExtracted = this.extractData(fileNames[fileIndex], fileContent, communicationPacket);
 				if (!fileExtracted) {
@@ -185,7 +185,7 @@ export default class App extends Component<AppProps, AppState> {
 				mode: "STATION_SELECTION",
 				untouchedFiles
 			}, () => {
-				this.showStationsOnMap(communicationPacket.stops);
+				// this.showStationsOnMap(communicationPacket.stops);
 			});
 		});
 	}
@@ -193,17 +193,17 @@ export default class App extends Component<AppProps, AppState> {
 	private extractVehicles(vehicleCategoriesTxt: string,
 		vehicleCouplingsTxt: string,
 		vehicleDoorsTxt: string): Vehicle[] {
-		
-		const vehicles: {[key: string]: Vehicle} = {};
+
+		const vehicles: { [key: string]: Vehicle } = {};
 		const categories: VehicleCategory[] = DataService.fromGTFS(vehicleCategoriesTxt, DataService.vehicleCategoryFromGTFS);
 		const couplings: VehicleCoupling[] = DataService.fromGTFS(vehicleCouplingsTxt, DataService.vehicleCouplingFromGTFS);
 		const doors: VehicleDoor[] = DataService.fromGTFS(vehicleDoorsTxt, DataService.vehicleDoorFromGTFS);
 
-		const categoriesHash: {[key: string]: VehicleCategory} = {};
+		const categoriesHash: { [key: string]: VehicleCategory } = {};
 		categories.forEach(category => {
 			categoriesHash[category.vehicleCategoryId] = category;
 		});
-		const doorsHash: {[key: string]: VehicleDoor[]} = {};
+		const doorsHash: { [key: string]: VehicleDoor[] } = {};
 		doors.forEach(door => {
 			if (!doorsHash[door.vehicleCategoryId]) {
 				doorsHash[door.vehicleCategoryId] = [];
@@ -505,7 +505,7 @@ export default class App extends Component<AppProps, AppState> {
 			for (const fileName in this.state.untouchedFiles) {
 				zip.file(fileName, this.state.untouchedFiles[fileName]);
 			}
-			
+
 			zip.generateAsync({
 				type: "blob",
 				platform: "UNIX",
@@ -553,8 +553,11 @@ export default class App extends Component<AppProps, AppState> {
 						<button className="download" onClick={this.handleDownloadClick}>Download</button>
 						<button className="load" onClick={this.handleLoadFeedClick}>Load another feed</button>
 					</div>
+					<ul>
+						{this.state.stations.stops.filter(stop => stop.locationType === 1).map(stop => (<li key={stop.stopId} onClick={() => this.handleStationSelect(stop.stopId)}>{stop.stopName}</li>))}
+					</ul>
 				</div>}
-				<div className={"map" + (this.state.mode !== "STATION_SELECTION" ? " hidden" : "")} ref={this.mapRef}></div>
+				{/* <div className={"map" + (this.state.mode !== "STATION_SELECTION" ? " hidden" : "")} ref={this.mapRef}></div> */}
 
 				{this.state.mode === "STATION_BUILDER" && this.state.selectedStation && (
 					<StationBuilder

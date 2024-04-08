@@ -35,7 +35,8 @@
 		display: flex;
 		flex-direction: row;
 		.left {
-			width: 70vw;
+			width: 100vw;
+			// width: 70vw;
 			height: calc(100vh - 30px);
 			display: block;
 		}

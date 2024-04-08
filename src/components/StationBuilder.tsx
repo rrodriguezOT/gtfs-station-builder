@@ -518,7 +518,7 @@ export default class StationBuilder extends Component<StationBuilderProps, Stati
 								</label>
 							</div>}
 						</div>
-						<div className="map" ref={this.mapRef}></div>
+						{/* <div className="map" ref={this.mapRef}></div> */}
 					</div>
 				</div>
 				{(this.state.selectedStop || this.state.selectedPathway) && <div className="dialog-bg" onClick={this.handleDialogCancel}></div>}
