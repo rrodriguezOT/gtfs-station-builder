@@ -49,7 +49,8 @@ export default class Vis extends Component<VisProps, VisState> {
 
 		// configure vis
 		var options = {
-			width: Math.round(VisService.visSize) + "px",
+			// width: Math.round(VisService.visSize) + "px",
+			width: "100%",
 			height: Math.round(VisService.visSize) + "px",
 			nodes: {
 				borderWidth: 2,
