@@ -15,7 +15,6 @@ import circleRedImage from '../images/circle-red.png';
 import circleBlueImage from '../images/circle-blue.png';
 import VehicleBoarding from '../interfaces/VehicleBoarding';
 import DataService from '../services/DataService';
-import MeasureTool from 'measuretool-googlemaps-v3';
 
 declare const google: any;
 
@@ -56,7 +55,7 @@ export interface StationBuilderState {
 }
 
 export default class StationBuilder extends Component<StationBuilderProps, StationBuilderState> {
-	private mapRef: React.RefObject<HTMLDivElement> = React.createRef();
+	// private mapRef: React.RefObject<HTMLDivElement> = React.createRef();
 
 	constructor(props: StationBuilderProps) {
 		super(props);
@@ -148,40 +147,40 @@ export default class StationBuilder extends Component<StationBuilderProps, Stati
 			});
 		});
 
-		let map: google.maps.Map;
+		// let map: google.maps.Map;
 
-		if (this.mapRef.current) {
-			if (this.props.mapDiv && this.props.map) {
-				this.mapRef.current.appendChild(this.props.mapDiv);
-				this.props.map.fitBounds(bounds);
-				map = this.props.map;
-			}
-			else {
-				console.log("Google map initialized");
-				map = new google.maps.Map(this.mapRef.current);
-				map.fitBounds(bounds);
-			}
+		// if (this.mapRef.current) {
+		// 	if (this.props.mapDiv && this.props.map) {
+		// 		this.mapRef.current.appendChild(this.props.mapDiv);
+		// 		this.props.map.fitBounds(bounds);
+		// 		map = this.props.map;
+		// 	}
+		// 	else {
+		// 		console.log("Google map initialized");
+		// 		map = new google.maps.Map(this.mapRef.current);
+		// 		map.fitBounds(bounds);
+		// 	}
 
-			google.maps.event.clearListeners(map, 'click');
-			google.maps.event.clearListeners(map, 'rightclick');
-			new MeasureTool(map, {
-				showSegmentLength: true,
-				unit: MeasureTool.UnitTypeId.METRIC
-			});
-		}
+		// 	google.maps.event.clearListeners(map, 'click');
+		// 	google.maps.event.clearListeners(map, 'rightclick');
+		// 	new MeasureTool(map, {
+		// 		showSegmentLength: true,
+		// 		unit: MeasureTool.UnitTypeId.METRIC
+		// 	});
+		// }
 
-		this.state.data.stops.filter((stop: Stop) => {
-			return [0, 2].includes(stop.locationType);
-		}).forEach((stop: Stop) => {
-			this.state.mapMarkers.push(new google.maps.Marker({
-				map: map,
-				position: {
-					lat: stop.stopLat,
-					lng: stop.stopLon
-				},
-				icon: stop.locationType === 0 ? circleBlueImage : circleRedImage
-			}));
-		});
+		// this.state.data.stops.filter((stop: Stop) => {
+		// 	return [0, 2].includes(stop.locationType);
+		// }).forEach((stop: Stop) => {
+		// 	this.state.mapMarkers.push(new google.maps.Marker({
+		// 		map: map,
+		// 		position: {
+		// 			lat: stop.stopLat,
+		// 			lng: stop.stopLon
+		// 		},
+		// 		icon: stop.locationType === 0 ? circleBlueImage : circleRedImage
+		// 	}));
+		// });
 
 		document.addEventListener('keydown', this.handleDocumentKeydown);
 	}
@@ -505,7 +504,7 @@ export default class StationBuilder extends Component<StationBuilderProps, Stati
 							onCancel={this.handleDialogCancel}
 							onApply={this.handlePathwayDialogApply}></PathwayDialog>}
 					</div>
-					<div className="right">
+					{/* <div className="right">
 						<div className="panel">
 							<div className="calculator">
 								Depth: <input type="text" onChange={(e) => {this.setState({
@@ -518,8 +517,8 @@ export default class StationBuilder extends Component<StationBuilderProps, Stati
 								</label>
 							</div>}
 						</div>
-						{/* <div className="map" ref={this.mapRef}></div> */}
-					</div>
+						<div className="map" ref={this.mapRef}></div>
+					</div> */}
 				</div>
 				{(this.state.selectedStop || this.state.selectedPathway) && <div className="dialog-bg" onClick={this.handleDialogCancel}></div>}
 			</div>

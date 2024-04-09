@@ -18,7 +18,7 @@ import Vehicle from "./interfaces/Vehicle";
 import VehicleCategory from "./interfaces/VehicleCategory";
 import VehicleCoupling from "./interfaces/VehicleCoupling";
 import VehicleDoor from "./interfaces/VehicleDoor";
-import MeasureTool from 'measuretool-googlemaps-v3';
+// import MeasureTool from 'measuretool-googlemaps-v3';
 
 export interface AppProps { }
 
@@ -39,7 +39,7 @@ export interface AppState {
 const STATION_SEARCH_RADIUS = 0.005;
 
 export default class App extends Component<AppProps, AppState> {
-	private mapRef: React.RefObject<HTMLDivElement> = React.createRef();
+	// private mapRef: React.RefObject<HTMLDivElement> = React.createRef();
 	private requiredFileNames = ["stops.txt", "pathways.txt"];
 
 	public constructor(props: AppProps) {
@@ -228,51 +228,51 @@ export default class App extends Component<AppProps, AppState> {
 		return Object.values(vehicles);
 	}
 
-	private showStationsOnMap(stops: Stop[]) {
-		let map: google.maps.Map;
-		if (!this.state.map) {
-			map = new google.maps.Map(this.mapRef.current);
-			new MeasureTool(map, {
-				showSegmentLength: true,
-				unit: MeasureTool.UnitTypeId.METRIC
-			});
-			console.log("Google map initialized");
-			this.setState({
-				map
-			});
-		}
-		else {
-			map = this.state.map;
-		}
+	// private showStationsOnMap(stops: Stop[]) {
+	// 	let map: google.maps.Map;
+	// 	if (!this.state.map) {
+	// 		map = new google.maps.Map(this.mapRef.current);
+	// 		new MeasureTool(map, {
+	// 			showSegmentLength: true,
+	// 			unit: MeasureTool.UnitTypeId.METRIC
+	// 		});
+	// 		console.log("Google map initialized");
+	// 		this.setState({
+	// 			map
+	// 		});
+	// 	}
+	// 	else {
+	// 		map = this.state.map;
+	// 	}
 
-		if (this.state.mapObjects.length === 0) {
-			const bounds = new google.maps.LatLngBounds();
-			stops.filter(stop => stop.locationType === 1).forEach(stop => {
-				const position = {
-					lat: stop.stopLat,
-					lng: stop.stopLon
-				};
-				bounds.extend(position);
-				const marker = new google.maps.Marker({
-					map,
-					position,
-					icon: circleBlackImage
-				});
-				const label = new TxtOverlay(
-					new google.maps.LatLng(stop.stopLat, stop.stopLon),
-					stop.stopName || "",
-					"station-name",
-					map
-				);
-				google.maps.event.addListener(marker, 'click', () => {
-					this.handleStationSelect(stop.stopId);
-				});
-				this.state.mapObjects.push(marker);
-				this.state.mapObjects.push(label);
-			});
-			map.fitBounds(bounds, 50);
-		}
-	}
+	// 	if (this.state.mapObjects.length === 0) {
+	// 		const bounds = new google.maps.LatLngBounds();
+	// 		stops.filter(stop => stop.locationType === 1).forEach(stop => {
+	// 			const position = {
+	// 				lat: stop.stopLat,
+	// 				lng: stop.stopLon
+	// 			};
+	// 			bounds.extend(position);
+	// 			const marker = new google.maps.Marker({
+	// 				map,
+	// 				position,
+	// 				icon: circleBlackImage
+	// 			});
+	// 			const label = new TxtOverlay(
+	// 				new google.maps.LatLng(stop.stopLat, stop.stopLon),
+	// 				stop.stopName || "",
+	// 				"station-name",
+	// 				map
+	// 			);
+	// 			google.maps.event.addListener(marker, 'click', () => {
+	// 				this.handleStationSelect(stop.stopId);
+	// 			});
+	// 			this.state.mapObjects.push(marker);
+	// 			this.state.mapObjects.push(label);
+	// 		});
+	// 		map.fitBounds(bounds, 50);
+	// 	}
+	// }
 
 	private checkRequiredFiles(fileNames: string[]): boolean {
 		const requiredFileMissing = this.requiredFileNames.some((requiredFileName: string) => {
